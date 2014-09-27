@@ -18,9 +18,9 @@ class connection {
      */
     public function conn() {
         $server = "localhost";
-        $username = "mobility_admin";
-        $password = "8zawt1vlLf";
-        $database = "mobility_centraltaxis";
+        $username = "root";
+        $password = "";
+        $database = "mobility";
         mysql_select_db($database, mysql_pconnect($server, $username, $password));
     }
 

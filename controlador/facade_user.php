@@ -25,7 +25,7 @@ try {
  * @throws Exception
  */
 function load($class, $method, $private_code) {
-    $load = "../Model/$class.php";
+    $load = "../modelo/$class.php";
     if (file_exists($load)) {
         include_once ($load);
         if (!method_exists($class, $method)) {
