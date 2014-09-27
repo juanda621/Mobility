@@ -7,7 +7,7 @@ header('Access-Control-Allow-Origin: *');
  * @author andresilvagomez
  */
 try {
-    $class = "user";
+    $class = "bus";
     $method = $_GET["method"];
     $private_code = $_POST["private_code"];
     if (load($class, $method, $private_code)) {
