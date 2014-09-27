@@ -12,6 +12,7 @@ try {
         $obj = new $class();
         echo $obj->$method($_POST);
     }
+    
 } catch (Exception $e) {
     echo json_encode(array("mensaje" => $e->getMessage()));
 }
