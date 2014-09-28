@@ -25,7 +25,7 @@ class connection {
         $username = "ijfgzyktrhpgjwya";
         $password = "UifYjeKHxTtSJ3WibKpQNNnAun4zeaqrMWdnwMeqSLZmLQmVBBmULpug5MC5jkDw";
         $database = "dbd8f5092965634cabb789a3b301439625";
-        mysql_select_db($database, mysql_pconnect($server, $username, $password));
+        mysql_select_db($database, mysql_connect($server, $username, $password));
     }
 
     /**
