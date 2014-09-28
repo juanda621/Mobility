@@ -13,7 +13,7 @@ $result = $connection->query($query);
 
 $records = array();
 
-while ($row = mysql_fetch_assoc($result)) {
+while ($row = mysqli_fetch_assoc($result)) {
     $querycategorias = "SELECT e.nombre as id
                         FROM estadoanimo e, empresas_estadoanimo  ee
                         WHERE  e.id_estadoanimo= ee.id_estadoanimo
@@ -21,7 +21,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $result2 = $connection->query($querycategorias);
     if ($result2) {
         $records2 = array();
-        while ($row2 = mysql_fetch_assoc($result2)) {
+        while ($row2 = mysqli_fetch_assoc($result2)) {
 
             $records2[] = $row2;
             $row['categorias'] = $records2;

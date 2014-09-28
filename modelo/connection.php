@@ -17,15 +17,16 @@ class connection {
      * Instancia la coneccion a la base de datos
      */
     public function conn() {
-        /*$server = "localhost";
-        $username = "root";
-        $password = "";
-        $database = "mobility";*/
-        $server = "d8f50929-6563-4cab-b789-a3b301439625.mysql.sequelizer.com";
-        $username = "ijfgzyktrhpgjwya";
-        $password = "UifYjeKHxTtSJ3WibKpQNNnAun4zeaqrMWdnwMeqSLZmLQmVBBmULpug5MC5jkDw";
-        $database = "dbd8f5092965634cabb789a3b301439625";
-        mysql_select_db($database, mysql_connect($server, $username, $password));
+        $dbhost = 'd8f50929-6563-4cab-b789-a3b301439625.mysql.sequelizer.com';
+        $dbuser = 'ijfgzyktrhpgjwya';
+        $dbpass = 'UifYjeKHxTtSJ3WibKpQNNnAun4zeaqrMWdnwMeqSLZmLQmVBBmULpug5MC5jkDw';
+        $dbname = 'dbd8f5092965634cabb789a3b301439625';
+
+        $con = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+        if (mysqli_connect_errno($con)) {
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
+        return $con;
     }
 
     /**
@@ -35,8 +36,8 @@ class connection {
      */
     public function query($query) {
         try {
-            $this->conn();
-            $result = mysql_query($query);
+            
+            $result = mysqli_query($this->conn(),$query);
             //$this->close();
             return $result;
         } catch (Exception $exc) {
@@ -53,9 +54,9 @@ class connection {
     public function delimit($result, $limit) {
         try {
             if ($this->count_row($result) >= $limit) {
-            return true;
-        }
-        return false;
+                return true;
+            }
+            return false;
         } catch (Exception $exc) {
             return "Ocurrio algo inesperado";
         }
@@ -183,7 +184,6 @@ class connection {
         return $return;
     }
 
-
     /**
      * El Operador cierra el sistema
      * @param type $param
@@ -221,8 +221,6 @@ class connection {
         return json_encode($json);
     }
 
-
-
     /**
      * verifica que el usuario este en la base de datos
      * devuelve un array [tipo de usuario,compa単ia a la que pertenece]
@@ -244,14 +242,12 @@ class connection {
             $query = "UPDATE users_companies SET last_connection= NOW(), connection=1 WHERE person_cc=$user";
             if ($this->query($query)) {
                 $row = mysql_fetch_row($result);
-                $query="INSERT historial_conecciones (user, ip) VALUES ('$user','$ip')";
+                $query = "INSERT historial_conecciones (user, ip) VALUES ('$user','$ip')";
                 $this->query($query);
                 return $row;
             }
         }
     }
-
-
 
     public function convert_array_json($result) {
         $json = array();
