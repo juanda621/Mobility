@@ -2,13 +2,13 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `citytaxi` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `citytaxi` ;
+CREATE SCHEMA IF NOT EXISTS `incity` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `incity` ;
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`drivers`
+-- Table `incity`.`drivers`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`drivers` (
+CREATE TABLE IF NOT EXISTS `incity`.`drivers` (
   `id` VARCHAR(10) NOT NULL,
   `name` VARCHAR(50) NOT NULL,
   `lastname` VARCHAR(50) NOT NULL,
@@ -25,9 +25,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`countries`
+-- Table `incity`.`countries`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`countries` (
+CREATE TABLE IF NOT EXISTS `incity`.`countries` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
@@ -36,9 +36,9 @@ PACK_KEYS = Default;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`domains`
+-- Table `incity`.`domains`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`domains` (
+CREATE TABLE IF NOT EXISTS `incity`.`domains` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `max_latitude` DOUBLE NOT NULL,
@@ -53,16 +53,16 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`domains` (
   INDEX `fk_domain_country1_idx` (`country_id` ASC),
   CONSTRAINT `fk_domain_country1`
     FOREIGN KEY (`country_id`)
-    REFERENCES `citytaxi`.`countries` (`id`)
+    REFERENCES `incity`.`countries` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`companies`
+-- Table `incity`.`companies`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`companies` (
+CREATE TABLE IF NOT EXISTS `incity`.`companies` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   `domain_id` INT NOT NULL,
@@ -70,44 +70,16 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`companies` (
   INDEX `fk_empresa_rodamiento_dominio1_idx` (`domain_id` ASC),
   CONSTRAINT `fk_empresa_rodamiento_dominio1`
     FOREIGN KEY (`domain_id`)
-    REFERENCES `citytaxi`.`domains` (`id`)
+    REFERENCES `incity`.`domains` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`makes`
+-- Table `incity`.`taxis`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`makes` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `citytaxi`.`references`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`references` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `make_id` INT NOT NULL,
-  `name` VARCHAR(45) NOT NULL,
-  `trunk` TINYINT(1) NOT NULL,
-  INDEX `fk_referencia_marca1_idx` (`make_id` ASC),
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_referencia_marca1`
-    FOREIGN KEY (`make_id`)
-    REFERENCES `citytaxi`.`makes` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `citytaxi`.`taxis`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`taxis` (
+CREATE TABLE IF NOT EXISTS `incity`.`taxis` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `company_id` INT NOT NULL,
   `reference_id` INT NOT NULL,
@@ -123,12 +95,7 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`taxis` (
   INDEX `fk_taxi_referencia1_idx` (`reference_id` ASC),
   CONSTRAINT `fk_taxi_empresa_rodamiento1`
     FOREIGN KEY (`company_id`)
-    REFERENCES `citytaxi`.`companies` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_taxi_referencia1`
-    FOREIGN KEY (`reference_id`)
-    REFERENCES `citytaxi`.`references` (`id`)
+    REFERENCES `incity`.`companies` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -136,9 +103,9 @@ PACK_KEYS = Default;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`users`
+-- Table `incity`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`users` (
+CREATE TABLE IF NOT EXISTS `incity`.`users` (
   `email` VARCHAR(45) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `phone` VARCHAR(15) NOT NULL,
@@ -154,9 +121,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`requests`
+-- Table `incity`.`requests`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`requests` (
+CREATE TABLE IF NOT EXISTS `incity`.`requests` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `type` VARCHAR(45) NULL,
   `so` VARCHAR(45) NULL,
@@ -168,16 +135,16 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`requests` (
   INDEX `fk_Requests_users1_idx` (`user_email` ASC),
   CONSTRAINT `fk_Requests_users1`
     FOREIGN KEY (`user_email`)
-    REFERENCES `citytaxi`.`users` (`email`)
+    REFERENCES `incity`.`users` (`email`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`services`
+-- Table `incity`.`services`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`services` (
+CREATE TABLE IF NOT EXISTS `incity`.`services` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `domain_id` INT NOT NULL,
   `address` VARCHAR(100) NOT NULL,
@@ -193,21 +160,21 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`services` (
   INDEX `fk_services_Requests1_idx` (`request_id` ASC),
   CONSTRAINT `fk_Servicio_Dominios`
     FOREIGN KEY (`domain_id`)
-    REFERENCES `citytaxi`.`domains` (`id`)
+    REFERENCES `incity`.`domains` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_services_Requests1`
     FOREIGN KEY (`request_id`)
-    REFERENCES `citytaxi`.`requests` (`id`)
+    REFERENCES `incity`.`requests` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`states`
+-- Table `incity`.`states`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`states` (
+CREATE TABLE IF NOT EXISTS `incity`.`states` (
   `service_id` INT NOT NULL,
   `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `state` INT NULL,
@@ -216,53 +183,16 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`states` (
   INDEX `fk_Estado_Servicio1_idx` (`service_id` ASC),
   CONSTRAINT `fk_Estado_Servicio1`
     FOREIGN KEY (`service_id`)
-    REFERENCES `citytaxi`.`services` (`id`)
+    REFERENCES `incity`.`services` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`disabled_users`
+-- Table `incity`.`admins`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`disabled_users` (
-  `user_email` VARCHAR(45) NOT NULL,
-  `reason` TEXT NOT NULL,
-  `date` TIMESTAMP NOT NULL,
-  `deleted_at` TIMESTAMP NULL,
-  INDEX `fk_usuario_inactivo_usuario1_idx` (`user_email` ASC),
-  CONSTRAINT `fk_usuario_inactivo_usuario`
-    FOREIGN KEY (`user_email`)
-    REFERENCES `citytaxi`.`users` (`email`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `citytaxi`.`taxi_document`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`taxi_document` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `taxi_id` INT NOT NULL,
-  `type` VARCHAR(45) NULL,
-  `number` VARCHAR(45) NULL,
-  `expiration` TIMESTAMP NULL,
-  `comments` TEXT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_documentos_taxi1_idx` (`taxi_id` ASC),
-  CONSTRAINT `fk_documentos_taxi1`
-    FOREIGN KEY (`taxi_id`)
-    REFERENCES `citytaxi`.`taxis` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `citytaxi`.`admins`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`admins` (
+CREATE TABLE IF NOT EXISTS `incity`.`admins` (
   `id` INT NOT NULL,
   `password` VARCHAR(300) NOT NULL,
   `name` VARCHAR(45) NULL,
@@ -277,30 +207,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`user_codes`
+-- Table `incity`.`devices`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`user_codes` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `user_email` VARCHAR(45) NOT NULL,
-  `code` VARCHAR(10) NULL,
-  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP NULL,
-  `expiration` INT NULL DEFAULT 8,
-  `type` INT NULL DEFAULT 1,
-  INDEX `fk_user_code_user1_idx` (`user_email` ASC),
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_user_code_user1`
-    FOREIGN KEY (`user_email`)
-    REFERENCES `citytaxi`.`users` (`email`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `citytaxi`.`devices`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`devices` (
+CREATE TABLE IF NOT EXISTS `incity`.`devices` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `taxi_id` INT NOT NULL,
   `driver_id` VARCHAR(10) NOT NULL,
@@ -321,21 +230,21 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`devices` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_device_taxi1`
     FOREIGN KEY (`taxi_id`)
-    REFERENCES `citytaxi`.`taxis` (`id`)
+    REFERENCES `incity`.`taxis` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_device_driver1`
     FOREIGN KEY (`driver_id`)
-    REFERENCES `citytaxi`.`drivers` (`id`)
+    REFERENCES `incity`.`drivers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`locations`
+-- Table `incity`.`locations`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`locations` (
+CREATE TABLE IF NOT EXISTS `incity`.`locations` (
   `device_id` INT NOT NULL,
   `latitude` DOUBLE NOT NULL,
   `longitude` DOUBLE NOT NULL,
@@ -346,16 +255,16 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`locations` (
   INDEX `fk_device_location_device1_idx` (`device_id` ASC),
   CONSTRAINT `fk_device_location_device1`
     FOREIGN KEY (`device_id`)
-    REFERENCES `citytaxi`.`devices` (`id`)
+    REFERENCES `incity`.`devices` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`assigned_services`
+-- Table `incity`.`assigned_services`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`assigned_services` (
+CREATE TABLE IF NOT EXISTS `incity`.`assigned_services` (
   `service_id` INT NOT NULL,
   `device_id` INT NOT NULL,
   `device_latitude` DOUBLE NOT NULL,
@@ -369,42 +278,21 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`assigned_services` (
   PRIMARY KEY (`service_id`),
   CONSTRAINT `fk_assigned_service_service1`
     FOREIGN KEY (`service_id`)
-    REFERENCES `citytaxi`.`services` (`id`)
+    REFERENCES `incity`.`services` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_assigned_service_device1`
     FOREIGN KEY (`device_id`)
-    REFERENCES `citytaxi`.`devices` (`id`)
+    REFERENCES `incity`.`devices` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`friends`
+-- Table `incity`.`favorites`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`friends` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `user_email` VARCHAR(45) NOT NULL,
-  `friend` VARCHAR(45) NULL,
-  `name` VARCHAR(45) NULL,
-  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP NULL,
-  `deleted_at` TIMESTAMP NULL,
-  INDEX `fk_users_has_users_users1_idx` (`user_email` ASC),
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_users_has_users_users1`
-    FOREIGN KEY (`user_email`)
-    REFERENCES `citytaxi`.`users` (`email`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `citytaxi`.`favorites`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`favorites` (
+CREATE TABLE IF NOT EXISTS `incity`.`favorites` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `services_id` INT NOT NULL,
   `name` VARCHAR(45) NULL,
@@ -414,35 +302,16 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`favorites` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_favorites_services1`
     FOREIGN KEY (`services_id`)
-    REFERENCES `citytaxi`.`services` (`id`)
+    REFERENCES `incity`.`services` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`charges`
+-- Table `incity`.`settings`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`charges` (
-  `id` INT NOT NULL,
-  `domains_id` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
-  `value` FLOAT NULL,
-  `deleted_at` TIMESTAMP NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_charges_domains1_idx` (`domains_id` ASC),
-  CONSTRAINT `fk_charges_domains1`
-    FOREIGN KEY (`domains_id`)
-    REFERENCES `citytaxi`.`domains` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `citytaxi`.`settings`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`settings` (
+CREATE TABLE IF NOT EXISTS `incity`.`settings` (
   `domain_id` INT NOT NULL,
   `take_service_time` INT NULL,
   `minimum_cost` FLOAT NULL,
@@ -458,16 +327,16 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`settings` (
   PRIMARY KEY (`domain_id`),
   CONSTRAINT `fk_settigns_domains1`
     FOREIGN KEY (`domain_id`)
-    REFERENCES `citytaxi`.`domains` (`id`)
+    REFERENCES `incity`.`domains` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`logins`
+-- Table `incity`.`logins`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`logins` (
+CREATE TABLE IF NOT EXISTS `incity`.`logins` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `device_id` VARCHAR(45) NULL,
@@ -476,7 +345,7 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`logins` (
   INDEX `fk_logins_drivers1_idx` (`driver_id` ASC),
   CONSTRAINT `fk_logins_drivers1`
     FOREIGN KEY (`driver_id`)
-    REFERENCES `citytaxi`.`drivers` (`id`)
+    REFERENCES `incity`.`drivers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -484,9 +353,9 @@ PACK_KEYS = Default;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`messages`
+-- Table `incity`.`messages`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`messages` (
+CREATE TABLE IF NOT EXISTS `incity`.`messages` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `service_id` INT NOT NULL,
   `message` TEXT NULL,
@@ -497,16 +366,16 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`messages` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_messages_assigned_services1`
     FOREIGN KEY (`service_id`)
-    REFERENCES `citytaxi`.`assigned_services` (`service_id`)
+    REFERENCES `incity`.`assigned_services` (`service_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `citytaxi`.`history_locations`
+-- Table `incity`.`history_locations`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `citytaxi`.`history_locations` (
+CREATE TABLE IF NOT EXISTS `incity`.`history_locations` (
   `device_id` INT NOT NULL,
   `latitude` DOUBLE NOT NULL,
   `longitude` DOUBLE NOT NULL,
@@ -518,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `citytaxi`.`history_locations` (
   PRIMARY KEY (`device_id`, `date`),
   CONSTRAINT `fk_device_location_device10`
     FOREIGN KEY (`device_id`)
-    REFERENCES `citytaxi`.`devices` (`id`)
+    REFERENCES `incity`.`devices` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
