@@ -17,10 +17,14 @@ class connection {
      * Instancia la coneccion a la base de datos
      */
     public function conn() {
-        $server = "localhost";
+        /*$server = "localhost";
         $username = "root";
         $password = "";
-        $database = "mobility";
+        $database = "mobility";*/
+        $server = "d8f50929-6563-4cab-b789-a3b301439625.mysql.sequelizer.com";
+        $username = "ijfgzyktrhpgjwya";
+        $password = "UifYjeKHxTtSJ3WibKpQNNnAun4zeaqrMWdnwMeqSLZmLQmVBBmULpug5MC5jkDw";
+        $database = "dbd8f5092965634cabb789a3b301439625";
         mysql_select_db($database, mysql_pconnect($server, $username, $password));
     }
 
