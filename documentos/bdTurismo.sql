@@ -157,6 +157,35 @@ CREATE TABLE IF NOT EXISTS `categoria_publicidad` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `estadoanimo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `estadoanimo` (
+  `id_estadoanimo` INT NOT NULL,
+  `nombre` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_estadoanimo`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `empresas_estadoanimo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `empresas_estadoanimo` (
+  `id_estadoanimo` INT NOT NULL,
+  `id_empresa` INT NOT NULL,
+  CONSTRAINT `fk_empresas_estadoanimo_estadoanimo1`
+    FOREIGN KEY (`id_estadoanimo`)
+    REFERENCES `estadoanimo` (`id_estadoanimo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_empresas_estadoanimo_empresas1`
+    FOREIGN KEY (`id_empresa`)
+    REFERENCES `empresas` (`id_empresa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
